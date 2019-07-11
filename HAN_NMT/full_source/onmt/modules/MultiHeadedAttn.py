@@ -127,7 +127,7 @@ class MultiHeadedAttention(nn.Module):
 		scores = torch.matmul(query_up, key_up.transpose(2, 3))
 
 		if mask is not None:
-			mask = mask.unsqueeze(1).expand_as(scores)
+			mask = mask.unsqueeze(1).expand_as(scores).cuda()
 			scores = scores.masked_fill(Variable(mask), -1e18)
 
 		# 3) Apply attention dropout and compute context vectors.

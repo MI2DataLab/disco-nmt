@@ -20,7 +20,7 @@ def make_translator(opt, report_score=True, out_file=None):
                 out_file = codecs.open(opt.output, 'w', 'utf-8')
         out_attn = opt.output + ".attn"
         if opt.gpu > -1:
-                torch.cuda.set_device(opt.gpu)
+                torch.device(opt.gpu)
 
         dummy_parser = argparse.ArgumentParser(description='train.py')
         onmt.opts.model_opts(dummy_parser)
@@ -216,7 +216,7 @@ class Translator(object):
 					self._report_bleu(tgt_path)
 				if self.report_rouge:
 					self._report_rouge(tgt_path)
-		print pred_words_total, end_time, pred_words_total/end_time
+		print(pred_words_total, end_time, pred_words_total/end_time)
 		if self.dump_beam:
 			import json
 			json.dump(self.translator.beam_accum,
@@ -382,7 +382,7 @@ class Translator(object):
 		if "tgt" in batch.__dict__:
 			ret["gold_score"], ret["ctx_attn"] = self._run_target(batch, data, context, translate_part)
 		ret["batch"] = batch
-		print ret
+		print(ret)
 		return ret
 
 	def update_context(self, pred, cache, ind_cache, enc_states, src, memory_bank, src_lengths, batch_i, translate_part, pad):

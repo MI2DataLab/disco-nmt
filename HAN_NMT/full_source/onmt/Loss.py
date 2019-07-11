@@ -155,10 +155,10 @@ class LossComputeBase(nn.Module):
         """
         pred = scores.max(1)[1]
         non_padding = target.ne(self.padding_idx)
-        num_correct = pred.eq(target) \
-                          .masked_select(non_padding) \
+        num_correct = pred.eq(target.cuda()) \
+                          .masked_select(non_padding.cuda()) \
                           .sum()
-        return onmt.Statistics(loss[0], non_padding.sum(), num_correct)
+        return onmt.Statistics(loss.item(), non_padding.sum(), num_correct)
 
     def _bottle(self, v):
         return v.view(-1, v.size(2))
@@ -200,15 +200,15 @@ class NMTLossCompute(LossComputeBase):
         }
 
     def _compute_loss(self, batch, output, target):
-        scores = self.generator(self._bottle(output))
+        scores = self.generator(self._bottle(output)).cuda()
 
-        gtruth = target.view(-1)
+        gtruth = target.view(-1).cuda()
         if self.confidence < 1:
             tdata = gtruth.data
-            mask = torch.nonzero(tdata.eq(self.padding_idx)).squeeze()
+            mask = torch.nonzero(tdata.eq(self.padding_idx)).squeeze().cuda()
             log_likelihood = torch.gather(scores.data, 1, tdata.unsqueeze(1))
             tmp_ = self.one_hot.repeat(gtruth.size(0), 1)
-            tmp_.scatter_(1, tdata.unsqueeze(1), self.confidence)
+            tmp_.scatter_(1, tdata.unsqueeze(1).cuda(), self.confidence)
             if mask.nelement() > 0:
                 log_likelihood.index_fill_(0, mask, 0.0)
                 tmp_.index_fill_(0, mask, 0.0)

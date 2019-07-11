@@ -251,12 +251,12 @@ def make_base_model(model_opt, fields, gpu, checkpoint=None, train_part="all"):
 		model.load_state_dict(model_dict, strict=False)
 		generator.load_state_dict(checkpoint['generator'])
 		if train_part == "context":
-			print "Freezing parameters of main model"
+			print("Freezing parameters of main model")
 			for param in model.parameters():
 				param.require_grad = False
 			for param in generator.parameters():
 				param.require_grad = False
-			print "Unfreezing parameters of context"
+			print("Unfreezing parameters of context")
 			for param in model.doc_context.parameters():
 				param.require_grad = True
 				if model_opt.param_init != 0.0:

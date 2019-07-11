@@ -68,7 +68,7 @@ if torch.cuda.is_available() and not opt.gpuid:
 	print("WARNING: You have a CUDA device, should run with -gpuid 0")
 
 if opt.gpuid:
-	cuda.set_device(opt.gpuid[0])
+	torch.cuda.set_device(torch.device('cuda:0'))
 	if opt.seed > 0:
 		torch.cuda.manual_seed(opt.seed)
 
@@ -234,7 +234,8 @@ def make_dataset_iter(datasets, fields, opt, is_train=True):
 			tgt_elements = count * max_tgt_in_batch
 			return max(src_elements, tgt_elements)
 
-	device = opt.gpuid[0] if opt.gpuid else -1
+	#device = opt.gpuid[0] if opt.gpuid else -1
+	device = torch.device('cuda:0')
 
 	return DatasetLazyIter(datasets, fields, batch_size, batch_size_fn,
 						   device, is_train, opt.train_part)

@@ -19,12 +19,11 @@ class DocumentIterator(torchtext.data.Iterator):
 				 batch_size_fn=None, train=True, shuffle=None,
 				 sort_within_batch=None):
 		
-		super(DocumentIterator, self).__init__(dataset, batch_size, device=device,
+		super(DocumentIterator, self).__init__(dataset, batch_size, device=torch.device('cuda:0'),
 				 batch_size_fn=batch_size_fn, train=train,
 				 repeat=False, shuffle=False, sort=False,
 				 sort_within_batch=sort_within_batch)
 		self.doc_index, self.doc_range = self.get_context_index(self.data())
-	
 		self.indx = None
 
 	def document_shuffler(self):

@@ -33,7 +33,7 @@ class Elementwise(nn.ModuleList):
     def forward(self, input):
         inputs = [feat.squeeze(2) for feat in input.split(1, dim=2)]
         assert len(self) == len(inputs)
-        outputs = [f(x) for f, x in zip(self, inputs)]
+        outputs = [f(x.cuda()) for f, x in zip(self, inputs)]
         if self.merge == 'first':
             return outputs[0]
         elif self.merge == 'concat' or self.merge == 'mlp':

@@ -403,7 +403,7 @@ class DocumentIterator(torchtext.data.Iterator):
 				 batch_size_fn=None, train=True, shuffle=None,
 				 sort_within_batch=None):
 		
-		super(DocumentIterator, self).__init__(dataset, batch_size, device=device,
+		super(DocumentIterator, self).__init__(dataset, batch_size, device=torch.device('cuda:0'),
 				 batch_size_fn=batch_size_fn, train=train,
 				 repeat=False, shuffle=False, sort=False,
 				 sort_within_batch=sort_within_batch)
@@ -455,7 +455,8 @@ class DocumentIterator(torchtext.data.Iterator):
 				self._iterations_this_epoch += 1
 				indx = np.where(self.indx[count:count + len(minibatch)])[0].tolist()
 				count += len(minibatch)
-				yield torchtext.data.Batch(minibatch, self.dataset, self.device, self.train), indx
+				#yield torchtext.data.Batch(minibatch, self.dataset, self.device, self.train), indx
+				yield torchtext.data.Batch(minibatch, self.dataset, self.device), indx
 			if not self.repeat:
 				raise StopIteration
 

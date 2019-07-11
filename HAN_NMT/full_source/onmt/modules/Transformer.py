@@ -47,7 +47,7 @@ class TransformerEncoderLayer(nn.Module):
 									mask=mask)
 		out = self.dropout(context) + inputs
 		if (out != out).any():
-			print context, input_norm, mask
+			print(context, input_norm, mask)
 			sys.exit()
 		return self.feed_forward(out)
 

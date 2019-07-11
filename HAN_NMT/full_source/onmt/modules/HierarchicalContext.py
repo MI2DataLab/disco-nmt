@@ -46,7 +46,7 @@ class HierarchicalContext(nn.Module):
 		self.layer_norm_query_word = onmt.modules.LayerNorm(size)
 		self.layer_norm_query_sent = onmt.modules.LayerNorm(size)
 		self.layer_norm_word = onmt.modules.LayerNorm(size)
- 		self.dropout = nn.Dropout(dropout)
+		self.dropout = nn.Dropout(dropout)
 		self.sent_attn = onmt.modules.MultiHeadedAttention(head_count, size, dropout=dropout)
 		self.word_attn = onmt.modules.MultiHeadedAttention(head_count, size, dropout=dropout)
 
@@ -56,9 +56,7 @@ class HierarchicalContext(nn.Module):
 		self.layer_norm_sent = onmt.modules.LayerNorm(size)
 
 		#if 'poswise_ff' in self.context_type:
-		self.feed_forward = PositionwiseFeedForward(size,
-												hidden_size,
-												dropout)
+		self.feed_forward = PositionwiseFeedForward(size, hidden_size, dropout)
 		#	self.feed_forward_s = PositionwiseFeedForward(size,
 		#											hidden_size,
 		#											dropout)
@@ -148,7 +146,7 @@ class HierarchicalContext(nn.Module):
 				index = np.zeros([b_size, self.context_size])-1
 			else:
 				assert b_size_ <= self.context_size, "Error in context"
-				index = np.matrix(range(b_size_-self.context_size, 0) + range(b_size_))		
+				index = np.matrix(list(range(b_size_-self.context_size, 0)) + list(range(b_size_)))		
 				index = index.repeat(b_size, axis=0)	
 
 		return index
