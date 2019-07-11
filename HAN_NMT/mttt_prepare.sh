@@ -1,8 +1,8 @@
 #!/bin/bash
 
 main_dir=/data/tomasz/baselines/HAN_NMT/datasets/
-language=en-ru
-src=ru
+language=en-zh
+src=zh
 tgt=en
 
 data_dir=$main_dir/$language/tok
